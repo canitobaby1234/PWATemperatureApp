@@ -31,7 +31,24 @@
   </body>
   <script>
 if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js', { scope: '/' });
+  navigator.serviceWorker.register('/sw.js', { scope: '/' })
+    .then(reg => {
+      console.log('SW registrado:', reg);
+      
+      // Actualizar SW cuando haya uno nuevo
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            // Hay una actualización disponible
+            if(confirm('Nueva versión disponible. ¿Actualizar?')) {
+              newWorker.postMessage({type: 'SKIP_WAITING'});
+              window.location.reload();
+            }
+          }
+        });
+      });
+    });
 }
 </script>
 </html>
