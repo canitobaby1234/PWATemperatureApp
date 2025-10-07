@@ -1,54 +1,73 @@
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
-  <head >
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="shortcut icon" href="https://c.s-microsoft.com/favicon.ico?v2" />
-    <link rel="stylesheet" href="converter.css">
-    <title>Temperature converter</title>
-  </head>
-  <body>
-    <form id="converter">
-  <label for="input-temp">temperature</label>
-  <input type="text" id="input-temp" name="input-temp" value="20" />
-  <label for="input-unit">from</label>
-  <select id="input-unit" name="input-unit">
-    <option value="c" selected>Celsius</option>
-    <option value="f">Fahrenheit</option>
-    <option value="k">Kelvin</option>
-  </select>
-  <label for="output-unit">to</label>
-  <select id="output-unit" name="output-unit">
-    <option value="c">Celsius</option>
-    <option value="f" selected>Fahrenheit</option>
-    <option value="k">Kelvin</option>
-  </select>
-  <output name="output-temp" id="output-temp" for="input-temp input-unit output-unit">68 F</output>
-</form>
-    <script src="converter.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="shortcut icon" href="https://c.s-microsoft.com/favicon.ico?v2" />
+  <link rel="stylesheet" href="converter.css">
+  <title>Temperature Converter</title>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="temp-icon">🌡️</div>
+      <h1>Temperature Converter</h1>
+      <p>Convert temperatures instantly</p>
+    </div>
 
-  </body>
+    <form id="converter">
+      <div class="input-group">
+        <label for="input-temp">Temperature Value</label>
+        <input type="text" id="input-temp" name="input-temp" value="20" />
+      </div>
+
+      <div class="input-group">
+        <label for="input-unit">From Unit</label>
+        <select id="input-unit" name="input-unit">
+          <option value="c" selected>Celsius (°C)</option>
+          <option value="f">Fahrenheit (°F)</option>
+          <option value="k">Kelvin (K)</option>
+        </select>
+      </div>
+
+      <button type="button" class="swap-btn" id="swap-btn" title="Swap units">⇅</button>
+
+      <div class="input-group">
+        <label for="output-unit">To Unit</label>
+        <select id="output-unit" name="output-unit">
+          <option value="c">Celsius (°C)</option>
+          <option value="f" selected>Fahrenheit (°F)</option>
+          <option value="k">Kelvin (K)</option>
+        </select>
+      </div>
+
+      <div class="output-section">
+        <div class="output-label">Result</div>
+        <output name="output-temp" id="output-temp" for="input-temp input-unit output-unit">68 °F</output>
+      </div>
+    </form>
+  </div>
+
+  <script src="converter.js"></script>
   <script>
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js', { scope: '/' })
-    .then(reg => {
-      console.log('SW registrado:', reg);
-      
-      // Actualizar SW cuando haya uno nuevo
-      reg.addEventListener('updatefound', () => {
-        const newWorker = reg.installing;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // Hay una actualización disponible
-            if(confirm('Nueva versión disponible. ¿Actualizar?')) {
-              newWorker.postMessage({type: 'SKIP_WAITING'});
-              window.location.reload();
-            }
-          }
+    if('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then(reg => {
+          console.log('SW registrado:', reg);
+          reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                if(confirm('Nueva versión disponible. ¿Actualizar?')) {
+                  newWorker.postMessage({type: 'SKIP_WAITING'});
+                  window.location.reload();
+                }
+              }
+            });
+          });
         });
-      });
-    });
-}
-</script>
+    }
+  </script>
+</body>
 </html>
