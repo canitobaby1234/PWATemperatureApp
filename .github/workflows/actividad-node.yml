@@ -1,0 +1,48 @@
+name: "Actividad YAML con Node"
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  instalar-node:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+      
+      - name: Instalar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Verificar instalación de Node
+        run: node --version
+      
+      - name: Verificar instalación de npm
+        run: npm --version
+
+  trabajo-secuenciado:
+    runs-on: ubuntu-latest
+    needs: instalar-node
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+      
+      - name: Instalar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Instalar dependencias del proyecto
+        run: npm install
+      
+      - name: Listar archivos del proyecto
+        run: ls -la
+      
+      - name: Mostrar información del proyecto
+        run: |
+          echo "Proyecto PWA Temperature App ejecutándose"
+          echo "Node instalado correctamente en el job anterior"
+          echo "Este es el segundo trabajo secuenciado con needs"
